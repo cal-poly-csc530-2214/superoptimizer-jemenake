@@ -1,0 +1,17 @@
+
+A few changes I made to the code (although some of them not really germane to
+the _synthesis_ part as much as sanity-check):
+
+- Added some printf's where aha.c computes the correct result so that:
+  - We're reminded of the search space Aha is using for input values, and
+  - We can verify that our own userfunc() is giving the proper values
+    (one of my functions was failing in this respect, as it was doing
+    bit manipulations on a signed int instead of an unsigned, and that
+    changed the results quite a bit)
+
+- Mostly discovered a host of seemingly simple operations which confounded
+  the optimizer:
+  - Summing all of the bits (eg 0xFF -> 8,  0x81 -> 2, etc) is too complicated
+  - Summing just bits 2, 1, and 0 is too complicated
+  - Summing bits 1 and 0 succeeded (4 instructions)
+  - Swapping bits 3 and 0 failed (even though swapping bits 1 and 0 works)  
